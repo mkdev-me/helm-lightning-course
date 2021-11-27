@@ -3,7 +3,8 @@ kind: Service
 metadata:
   labels:
     app: pgadmin
-  name: pgadmin
+    env: {{ .Values.env }}
+  name: pgadmin-{{ .Values.env }}
 spec:
   ports:
   - port: 80
@@ -11,5 +12,6 @@ spec:
     targetPort: 80
   selector:
     app: pgadmin
+    env: {{ .Values.env }}
   sessionAffinity: None
   type: ClusterIP

@@ -1,18 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pgadmin
+  name: pgadmin-{{ .Values.env }}
   labels:
     app: pgadmin
+    env: {{ .Values.env }}
 spec:
+{{- if eq .Values.env "production" }}
+  replicas: 3
+{{- else }}
   replicas: 1
+{{- end }}
   selector:
     matchLabels:
       app: pgadmin
+      env: {{ .Values.env }}
   template:
     metadata:
       labels:
         app: pgadmin
+        env: {{ .Values.env }}
     spec:
       containers:
       - name: pgadmin
