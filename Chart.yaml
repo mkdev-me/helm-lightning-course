@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mkdev-pgadmin
+description: A Helm chart for pgAdmin
+type: application
+version: 0.1.0
+appVersion: 1.16.0
