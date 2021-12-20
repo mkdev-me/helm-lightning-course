@@ -1,1 +1,5 @@
 env: staging
+postgresql:
+  postgresqlPassword: secrets
+  postgresqlUsername: mkdev
+  postgresqlDatabase: chlm-101
