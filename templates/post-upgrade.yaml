@@ -1,0 +1,44 @@
+kind: ConfigMap
+metadata:
+  name: pgadmin-post-upgrade-script
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-weight": "1"
+data:
+  notify.sh: |
+    #!/bin/sh
+
+    curl -i -X POST -H 'Content-Type: application/json' -d "{\"text\": \"pgadmin version $1 is deployed to Kubernetes! :tada:\"}" https://im.mkdev.me/hooks/xxxxx
+apiVersion: v1
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pgadmin-post-upgrade-{{ .Release.Revision }}
+  annotations:
+    "helm.sh/hook": post-upgrade
+spec:
+  template:
+    metadata:
+      name: pgadmin-post-upgrade
+      labels:
+        app: pgadmin-post-upgrade
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: pre-upgrade-hook
+        image: fedora
+        command:
+          - /tmp/notify.sh
+          - "{{ .Release.Revision }}"
+        volumeMounts:
+            - mountPath: /tmp
+              name: pgadmin-post-upgrade-script
+      volumes:
+        - name: pgadmin-post-upgrade-script
+          configMap:
+            name: pgadmin-post-upgrade-script
+            defaultMode: 0777
+
