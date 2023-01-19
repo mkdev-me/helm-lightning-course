@@ -1,5 +1,8 @@
 env: staging
 postgresql:
+  primary:
+    persistence:
+      enabled: false
   postgresqlPassword: secrets
   postgresqlUsername: mkdev
   postgresqlDatabase: chlm-101
